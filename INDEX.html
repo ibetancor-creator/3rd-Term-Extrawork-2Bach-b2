@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Use of English Practice 1 & Certificate</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            border-top: 10px solid #d2232a; /* Claret Red */
+        }
+        h1 {
+            text-align: center;
+            color: #000;
+            border-bottom: 2px solid #d2232a;
+            padding-bottom: 10px;
+        }
+        .header-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            background-color: #ffdd00; /* Claret Yellow */
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .section-title {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            margin-top: 30px;
+            border-radius: 5px;
+            text-transform: uppercase;
+            font-size: 1.1em;
+        }
+        .question {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        select, input[type="text"] {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            margin: 0 5px;
+            font-family: inherit;
+        }
+        input[type="text"] {
+            width: 150px;
+            text-align: center;
+            text-transform: uppercase; 
+        }
+        .instructions {
+            font-style: italic;
+            color: #555;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        .btn-submit {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #d2232a;
+            color: white;
+            border: none;
+            font-size: 1.2em;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 30px;
+            transition: background 0.3s;
+        }
+        .btn-submit:hover {
+            background-color: #b01c22;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1000; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            background-color: rgba(0,0,0,0.5); 
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            width: 400px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .modal-content input, .modal-content select {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .modal-content button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        /* Certificate Styles */
+        #certificate-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .certificate-box {
+            width: 800px;
+            height: 600px;
+            background-color: #fff;
+            border: 20px solid #d2232a;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            background-image: radial-gradient(circle, #fff 90%, #ffdd00 100%);
+        }
+        .cert-title {
+            font-size: 3em;
+            color: #d2232a;
+            font-family: 'Georgia', serif;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .cert-subtitle {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 40px;
+        }
+        .cert-name {
+            font-size: 2.5em;
+            font-weight: bold;
+            border-bottom: 2px solid #333;
+            display: inline-block;
+            min-width: 400px;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+            font-family: 'Brush Script MT', cursive; 
+        }
+        .cert-text {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+        .cert-score {
+            font-size: 2em;
+            color: #d2232a;
+            font-weight: bold;
+            margin-bottom: 40px;
+        }
+        .cert-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+            padding: 0 50px;
+        }
+        .signature-line {
+            border-top: 1px solid #333;
+            width: 200px;
+            padding-top: 10px;
+            font-weight: bold;
+        }
+
+        /* Countdown Overlay */
+        #overlay-countdown {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .count-number {
+            font-size: 10em;
+            color: #d2232a;
+            font-weight: bold;
+            animation: popIn 0.5s ease-out;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            80% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .feedback {
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .correct-text { color: green; }
+        .incorrect-text { color: red; }
+
+    </style>
+</head>
+<body>
+
+<div class="container" id="exam-container">
+    <h1>USE OF ENGLISH PRACTICE 1</h1>
+    
+    <div class="header-info">
+        <div>Exam: B2/C1 Practice</div>
+        <div>Total Points: 30</div>
+    </div>
+
+    <!-- PART 1 -->
+    <div class="section-title">Part 1: Multiple Choice Cloze</div>
+    <div class="instructions">For questions 1-8, read the text below and decide which answer (A, B, C or D) best fits each gap.</div>
+
+    <div class="question">
+        <strong>The Best Advice I Ever Got</strong><br><br>
+        When I was younger, I (0) <em>could</em> run very fast, but I wasn't very disciplined. My coach told me that talent alone isn't enough; you (1)
+        <select id="q1">
+            <option value="">---</option>
+            <option value="A">A) must</option>
+            <option value="B">B) need</option>
+            <option value="C">C) ought</option>
+            <option value="D">D) have</option>
+        </select>
+        also work hard. He said, "You (2)
+        <select id="q2">
+            <option value="">---</option>
+            <option value="A">A) must</option>
+            <option value="B">B) should</option>
+            <option value="C">C) have</option>
+            <option value="D">D) could</option>
+        </select>
+        to arrive at training on time every day."
+        <br><br>
+        I realized I (3)
+        <select id="q3">
+            <option value="">---</option>
+            <option value="A">A) should</option>
+            <option value="B">B) had</option>
+            <option value="C">C) would</option>
+            <option value="D">D) must</option>
+        </select>
+        better start taking it seriously. In the past, I (4)
+        <select id="q4">
+            <option value="">---</option>
+            <option value="A">A) would</option>
+            <option value="B">B) used</option>
+            <option value="C">C) should</option>
+            <option value="D">D) might</option>
+        </select>
+        often skip practice to go out with friends. Looking back, I see that I (5)
+        <select id="q5">
+            <option value="">---</option>
+            <option value="A">A) must</option>
+            <option value="B">B) should</option>
+            <option value="C">C) ought</option>
+            <option value="D">D) need</option>
+        </select>
+        have been more responsible. My coach warned me that if I didn't improve, I (6)
+        <select id="q6">
+            <option value="">---</option>
+            <option value="A">A) can</option>
+            <option value="B">B) might</option>
+            <option value="C">C) shall</option>
+            <option value="D">D) ought</option>
+        </select>
+        lose my spot on the team.
+        <br><br>
+        Now, I know he was right. We (7)
+        <select id="q7">
+            <option value="">---</option>
+            <option value="A">A) should</option>
+            <option value="B">B) ought</option>
+            <option value="C">C) need</option>
+            <option value="D">D) have</option>
+        </select>
+        definitely listen to those with more experience. It (8)
+        <select id="q8">
+            <option value="">---</option>
+            <option value="A">A) can</option>
+            <option value="B">B) needs</option>
+            <option value="C">C) shall</option>
+            <option value="D">D) ought</option>
+        </select>
+        be difficult to accept criticism, but it is necessary for growth.
+    </div>
+
+    <!-- PART 2 -->
+    <div class="section-title">Part 2: Open Cloze</div>
+    <div class="instructions">For questions 9-16, read the text below and think of the word which best fits each gap. Use only <strong>one word</strong> in each gap.</div>
+
+    <div class="question">
+        <strong>A Strange Noise</strong><br><br>
+        My brother, (0) <em>who</em> is usually very brave, called me last night in a panic. He asked me (9)
+        <input type="text" id="q9">
+        I knew a good locksmith. He said he (10)
+        <input type="text" id="q10">
+        hear strange noises in his basement.
+        <br><br>
+        I told him it (11)
+        <input type="text" id="q11">
+        probably just the wind, but he insisted it (12)
+        <input type="text" id="q12">
+        be an intruder because the window was broken. I advised him (13)
+        <input type="text" id="q13">
+        call the police immediately.
+        <br><br>
+        In the end, it turned out to be a stray cat. He needn't (14)
+        <input type="text" id="q14">
+        worried so much! However, he really (15)
+        <input type="text" id="q15">
+        to fix that window soon. Next time, he had (16)
+        <input type="text" id="q16">
+        check carefully before panicking.
+    </div>
+
+    <!-- PART 3 -->
+    <div class="section-title">Part 3: Word Formation</div>
+    <div class="instructions">For questions 17-24, use the word given in capitals at the end of the lines to form a word that fits in the gap.</div>
+
+    <div class="question">
+        <strong>Choosing a Career</strong><br><br>
+        Having the (0) <em>ABILITY</em> to choose the right career is important.<br><br>
+        17. Some jobs require a high level of <input type="text" id="q17"> (ARTIST) creativity.<br>
+        18. There is a <input type="text" id="q18"> (POSSIBLE) that you will change careers at least once.<br>
+        19. It is a <input type="text" id="q19"> (NECESSARY) to have good communication skills.<br>
+        20. Employers look for people who can work <input type="text" id="q20"> (EFFECTIVE).<br>
+        21. If you are <input type="text" id="q21"> (CERTAIN) about your path, speak to a counselor.<br>
+        22. They can give you a clear <input type="text" id="q22"> (EXPLAIN) of your options.<br>
+        23. Don't make a decision <input type="text" id="q23"> (HASTY); take your time.<br>
+        24. Finding the right job is a truly <input type="text" id="q24"> (VALUE) experience.
+    </div>
+
+    <!-- PART 4 -->
+    <div class="section-title">Part 4: Key Word Transformation</div>
+    <div class="instructions">Complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. Use between <strong>two and five words</strong>.</div>
+
+    <div class="question">
+        25. It wasn't necessary for you to bring food, but thanks. (HAVE)<br>
+        You <input type="text" id="q25" style="width: 250px;"> brought food, but thanks.
+    </div>
+    <div class="question">
+        26. "Where is the station?" asked the tourist. (KNEW)<br>
+        The tourist asked if I <input type="text" id="q26" style="width: 250px;"> the station was.
+    </div>
+    <div class="question">
+        27. I advise you to see a doctor. (BETTER)<br>
+        You <input type="text" id="q27" style="width: 250px;"> see a doctor.
+    </div>
+    <div class="question">
+        28. It is forbidden to park here. (NOT)<br>
+        You <input type="text" id="q28" style="width: 250px;"> park here.
+    </div>
+    <div class="question">
+        29. I'm sure he is at home; the lights are on. (MUST)<br>
+        He <input type="text" id="q29" style="width: 250px;"> at home because the lights are on.
+    </div>
+    <div class="question">
+        30. Perhaps she missed the bus. (MIGHT)<br>
+        She <input type="text" id="q30" style="width: 250px;"> the bus.
+    </div>
+
+    <button id="btn-finish" class="btn-submit">Finish Attempt</button>
+</div>
+
+<!-- Modal for Student Data -->
+<div id="data-modal" class="modal">
+    <div class="modal-content">
+        <h2>Great Job!</h2>
+        <p>Please enter your details to generate your certificate.</p>
+        <input type="text" id="student-name" placeholder="Enter your full name" required>
+        <input type="text" id="student-class" placeholder="Class / Group" required>
+        <select id="teacher-select">
+            <option value="" disabled selected>Select your teacher</option>
+            <option value="Sara">Sara</option>
+            <option value="Lola">Lola</option>
+            <option value="Ivan">Ivan</option>
+        </select>
+        <button id="btn-generate">Get Certificate</button>
+    </div>
+</div>
+
+<!-- Countdown Overlay -->
+<div id="overlay-countdown">
+    <div class="count-number" id="countdown">3</div>
+    <h2 style="font-size: 2em; margin-top: 20px;">Generating Certificate...</h2>
+</div>
+
+<!-- Certificate Container -->
+<div id="certificate-container">
+    <div class="certificate-box">
+        <!-- Logo Placeholder -->
+        <div style="font-size: 40px; margin-bottom: 10px;">🎓</div>
+        
+        <div class="cert-title">Certificate of Completion</div>
+        <div class="cert-subtitle">This certifies that</div>
+        
+        <div class="cert-name" id="cert-name">Student Name</div>
+        
+        <div class="cert-text">
+            has successfully completed the <strong>Use of English Practice 1</strong><br>
+            Class: <span id="cert-class">Group A</span>
+        </div>
+
+        <div class="cert-score">
+            Score: <span id="cert-score-val">0 / 30</span>
+        </div>
+
+        <div class="cert-footer">
+            <div>
+                <div class="signature-line" id="cert-teacher-sig">Teacher Name</div>
+                <div>Teacher</div>
+            </div>
+            <div>
+                <div class="signature-line" id="cert-date">Date</div>
+                <div>Date</div>
+            </div>
+        </div>
+    </div>
+    <button class="btn-submit" onclick="location.reload()" style="width: 200px;">Take Exam Again</button>
+</div>
+
+<script>
+    // Answer Key
+    const correctAnswers = {
+        q1: "A", q2: "C", q3: "B", q4: "A", 
+        q5: "B", q6: "B", q7: "A", q8: "A",
+        // Part 2
+        q9: ["IF", "WHETHER"], q10: "COULD", q11: "WAS", q12: "MUST",
+        q13: "TO", q14: "HAVE", q15: "OUGHT", q16: "BETTER",
+        // Part 3
+        q17: "ARTISTIC", q18: "POSSIBILITY", q19: "NECESSITY", q20: "EFFECTIVELY",
+        q21: "UNCERTAIN", q22: "EXPLANATION", q23: "HASTILY", q24: "VALUABLE",
+        // Part 4
+        q25: "NEEDN'T HAVE", q26: "KNEW WHERE", q27: "HAD BETTER",
+        q28: ["MUST NOT", "CANNOT", "CAN'T", "MUSTN'T"], q29: "MUST BE", q30: "MIGHT HAVE MISSED"
+    };
+
+    let finalScore = 0;
+    const totalQuestions = 30;
+
+    document.getElementById('btn-finish').addEventListener('click', function() {
+        let score = 0;
+
+        // Check Questions
+        for (let i = 1; i <= 30; i++) {
+            const inputId = 'q' + i;
+            const element = document.getElementById(inputId);
+            
+            if (!element) continue;
+
+            let userAnswer = element.value.trim().toUpperCase();
+            let correctAnswer = correctAnswers[inputId];
+            let isCorrect = false;
+
+            if (Array.isArray(correctAnswer)) {
+                if (correctAnswer.includes(userAnswer)) isCorrect = true;
+            } else {
+                if (userAnswer === correctAnswer) isCorrect = true;
+            }
+
+            // Visual Feedback & Scoring
+            // Remove previous feedback if any
+            const parent = element.parentElement;
+            const oldFeedback = parent.querySelector('.feedback');
+            if(oldFeedback) oldFeedback.remove();
+
+            const feedbackSpan = document.createElement('span');
+            feedbackSpan.className = 'feedback';
+
+            if (isCorrect) {
+                score++;
+                element.style.borderColor = "green";
+                element.style.backgroundColor = "#e6fffa";
+                feedbackSpan.innerHTML = "✓";
+                feedbackSpan.classList.add("correct-text");
+            } else {
+                element.style.borderColor = "red";
+                element.style.backgroundColor = "#ffe6e6";
+                feedbackSpan.innerHTML = `✗ (${Array.isArray(correctAnswer) ? correctAnswer[0] : correctAnswer})`;
+                feedbackSpan.classList.add("incorrect-text");
+            }
+            parent.insertBefore(feedbackSpan, element.nextSibling);
+        }
+
+        finalScore = score;
+
+        // Show Modal
+        document.getElementById('data-modal').style.display = 'flex';
+    });
+
+    document.getElementById('btn-generate').addEventListener('click', function() {
+        const nameInput = document.getElementById('student-name').value;
+        const classInput = document.getElementById('student-class').value;
+        const teacherInput = document.getElementById('teacher-select').value;
+
+        if (nameInput.trim() === "" || classInput.trim() === "" || teacherInput === "") {
+            alert("Please fill in all fields (Name, Class, and Teacher)!");
+            return;
+        }
+
+        // Close Modal
+        document.getElementById('data-modal').style.display = 'none';
+
+        // Start Certificate Sequence
+        startCertificateSequence(nameInput, classInput, teacherInput, finalScore, totalQuestions);
+    });
+
+    function startCertificateSequence(name, className, teacher, score, total) {
+        const overlay = document.getElementById('overlay-countdown');
+        const countdownEl = document.getElementById('countdown');
+        const certContainer = document.getElementById('certificate-container');
+        const examContainer = document.getElementById('exam-container');
+
+        // Fill Certificate Data
+        document.getElementById('cert-name').innerText = name;
+        document.getElementById('cert-class').innerText = className;
+        document.getElementById('cert-score-val').innerText = `${score} / ${total}`;
+        document.getElementById('cert-teacher-sig').innerText = teacher;
+        
+        // Date
+        const today = new Date();
+        document.getElementById('cert-date').innerText = today.toLocaleDateString();
+
+        // Scroll top
+        window.scrollTo(0, 0);
+
+        // Countdown
+        overlay.style.display = 'flex';
+        let count = 3;
+        countdownEl.innerText = count;
+
+        let timer = setInterval(() => {
+            count--;
+            if (count > 0) {
+                countdownEl.innerText = count;
+            } else {
+                clearInterval(timer);
+                overlay.style.display = 'none'; 
+                examContainer.style.display = 'none';
+                certContainer.style.display = 'flex'; 
+            }
+        }, 1000);
+    }
+</script>
+
+</body>
+</html>
